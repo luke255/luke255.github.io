@@ -1,0 +1,47 @@
+/* Basic layout and spacing thanks in part to KeenRivals/bestmotherfucking.website */
+a {
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+main a:hover {
+    text-decoration: underline;
+}
+
+body {
+    background: black;
+    color: white;
+    font: 1.2em/1.62 sans-serif;
+    margin: 1em auto;
+    max-width: 40em;
+    padding: 0 0.62em;
+}
+
+footer svg {
+    fill: white;
+    height: 2em;
+    margin: 0.3em;
+    width: 2em;
+}
+
+h1,
+h2,
+h3 {
+    line-height: 1.2;
+}
+
+header img {
+    border-radius: 50%;
+}
+@media (prefers-color-scheme: light) {
+    a,
+    body {
+        background: white;
+        color: black;
+    }
+
+    footer svg {
+        fill: black;
+    }
+}

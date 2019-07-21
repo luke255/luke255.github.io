@@ -1,6 +1,6 @@
 /* Basic layout and spacing thanks in part to KeenRivals/bestmotherfucking.website */
 :root {
-    --dark: #222;
+    --dark: #111;
     --light: #fff;
     --bg-color: var(--dark);
     --fg-color: var(--light);
@@ -23,6 +23,18 @@ body {
     margin: 1em auto;
     max-width: 40em;
     padding: 0 0.62em;
+}
+
+canvas {
+    background-color: var(--bg-color);
+    left: 0;
+    height: 100%;
+    image-rendering: pixelated;
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: -1;
 }
 
 footer svg {

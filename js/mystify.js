@@ -45,10 +45,10 @@
             var l = this.p[i];
             l.x += l.dx;
             l.y += l.dy;
-            if (l.x < 0) l.dx = -l.dx;
-            else if (l.x > canvas.width) l.dx = -l.dx;
-            if (l.y > canvas.height) l.dy = -l.dy;
-            else if (l.y < 0) l.dy = -l.dy;
+            if (l.x < 0 && l.dx < 0) l.dx = -l.dx;
+            else if (l.x > canvas.width && l.dx > 0) l.dx = -l.dx;
+            if (l.y > canvas.height && l.dy > 0) l.dy = -l.dy;
+            else if (l.y < 0 && l.dy < 0) l.dy = -l.dy;
         }
     };
     var ctx = canvas.elem.getContext('2d');

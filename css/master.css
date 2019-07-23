@@ -1,61 +1,62 @@
 /* Basic layout and spacing thanks in part to KeenRivals/bestmotherfucking.website */
 :root {
-    --dark: #111;
-    --light: #fff;
-    --bg-color: var(--dark);
-    --fg-color: var(--light);
+  --dark: #111;
+  --light: #fff;
+  --bg-color: var(--dark);
+  --fg-color: var(--light);
 }
 
 a {
-    color: var(--fg-color);
-    font-weight: 600;
-    text-decoration: none;
-}
-
-main a:hover {
-    text-decoration: underline;
+  color: var(--fg-color);
+  font-weight: 600;
+  text-decoration: none;
 }
 
 body {
-    background-color: var(--bg-color);
-    color: var(--fg-color);
-    font: 1.2em/1.62 sans-serif;
-    margin: 1em auto;
-    max-width: 40em;
-    padding: 0 0.62em;
+  background-color: var(--bg-color);
+  color: var(--fg-color);
+  font: 1.2em/1.62 sans-serif;
+  margin: 1em auto;
+  max-width: 40em;
+  padding: 0 0.62em;
 }
 
 canvas {
-    background-color: var(--bg-color);
-    left: 0;
-    height: 100%;
-    image-rendering: pixelated;
-    pointer-events: none;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: -1;
+  background-color: var(--bg-color);
+  height: 100%;
+  image-rendering: pixelated;
+  left: 0;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: -1;
 }
 
 footer svg {
-    fill: var(--fg-color);
-    height: 2em;
-    margin: 0.3em;
-    width: 2em;
+  fill: var(--fg-color);
+  height: 2em;
+  margin: 0.3em;
+  width: 2em;
 }
 
 h1,
 h2,
 h3 {
-    line-height: 1.2;
+  line-height: 1.2;
 }
 
 header img {
-    border-radius: 50%;
+  border-radius: 50%;
 }
+
+main a:hover {
+  text-decoration: underline;
+}
+
 @media (prefers-color-scheme: light) {
-    :root {
-        --bg-color: var(--light);
-        --fg-color: var(--dark);
-    }
+  :root {
+    --bg-color: var(--light);
+    --fg-color: var(--dark);
+  }
 }

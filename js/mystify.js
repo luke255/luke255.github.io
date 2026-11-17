@@ -1,66 +1,62 @@
-// Thanks to Maxim Leyzerovich (@round)
-! function() {
-    var canvas = {
-        width: 0,
-        height: 0,
-        elem: document.getElementsByTagName('canvas')[0]
-    };
-    if (typeof canvas.elem.getContext === 'undefined') {
+// Mystify, after the old Windows screensaver: two bouncing shapes and their trails.
+(function () {
+    var canvas = document.getElementsByTagName('canvas')[0];
+    if (!canvas.getContext || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
         return;
     }
-    var run = function() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        hue = (hue < 360) ? (hue + 0.25) : 0;
-        ctx.strokeStyle = 'hsl(' + Math.floor(hue) + ', 50%, 50%)';
-        ctx.lineWidth = 1;
-        if (nPoly < 12) poly[nPoly++] = new Poly();
-        for (var i = 0; i < nPoly; i++) {
-            poly[i].anim();
-        }
-        requestAnimationFrame(run);
-    };
-    var Poly = function() {
-        this.p = [];
-        var space = 2;
-        var dV = [-space, space, space, -space, -space, space, -space, space];
-        var xyP = [1, 1, 3, 3, 1, 3, 3, 1];
-        for (var i = 0; i < 4; i++) {
-            this.p[i] = {
-                dx: 4 * dV[i],
-                dy: 4 * dV[i + 4],
-                x: 4 * ((canvas.width / 20 / (2 * 4)) * xyP[i] * 10),
-                y: 4 * ((canvas.height / 20 / (2 * 4)) * xyP[i + 4] * 10)
-            };
-        }
-    };
-    Poly.prototype.anim = function() {
+    var ctx = canvas.getContext('2d');
+    var shapes = [], hue = 0, frame = 0, i, j;
+
+    // Corners move in fractions of the screen, so a resize just stretches them.
+    function corner() {
+        var speed = function () {
+            return (Math.random() * 0.004 + 0.001) * (Math.random() < 0.5 ? -1 : 1);
+        };
+        return { x: Math.random(), y: Math.random(), dx: speed(), dy: speed() };
+    }
+
+    for (i = 0; i < 2; i++) {
+        shapes.push({ corners: [corner(), corner(), corner(), corner()], trail: [] });
+    }
+
+    function draw(points, colour) {
+        ctx.strokeStyle = colour;
         ctx.beginPath();
-        ctx.moveTo(this.p[0].x, this.p[0].y);
-        ctx.lineTo(this.p[1].x, this.p[1].y);
-        ctx.lineTo(this.p[2].x, this.p[2].y);
-        ctx.lineTo(this.p[3].x, this.p[3].y);
+        for (var k = 0; k < points.length; k++) {
+            ctx[k ? 'lineTo' : 'moveTo'](points[k].x * canvas.width, points[k].y * canvas.height);
+        }
         ctx.closePath();
         ctx.stroke();
-        for (var i = 0; i < 4; i++) {
-            var l = this.p[i];
-            l.x += l.dx;
-            l.y += l.dy;
-            if (l.x < 0 && l.dx < 0) l.dx = -l.dx;
-            else if (l.x > canvas.width && l.dx > 0) l.dx = -l.dx;
-            if (l.y > canvas.height && l.dy > 0) l.dy = -l.dy;
-            else if (l.y < 0 && l.dy < 0) l.dy = -l.dy;
+    }
+
+    function step() {
+        if (canvas.width !== canvas.offsetWidth || canvas.height !== canvas.offsetHeight) {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
         }
-    };
-    var ctx = canvas.elem.getContext('2d');
-    ctx.translate(0.5, 0.5);
-    var hue = 300;
-    canvas.resize = function() {
-        this.width = this.elem.width = this.elem.offsetWidth * 1;
-        this.height = this.elem.height = this.elem.offsetHeight * 1;
-    };
-    window.addEventListener('resize', canvas.resize.bind(canvas), false);
-    canvas.resize();
-    var poly = [],
-        nPoly = 0;
-    run();
-}();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        hue = (hue + 0.25) % 360;
+        frame++;
+        for (i = 0; i < shapes.length; i++) {
+            var shape = shapes[i];
+            for (j = 0; j < 4; j++) {
+                var c = shape.corners[j];
+                c.x += c.dx;
+                c.y += c.dy;
+                if (c.x < 0 || c.x > 1) c.dx = -c.dx;
+                if (c.y < 0 || c.y > 1) c.dy = -c.dy;
+            }
+            if (frame % 6 === 0) {
+                shape.trail.unshift(shape.corners.map(function (p) { return { x: p.x, y: p.y }; }));
+                shape.trail.length = Math.min(shape.trail.length, 6);
+            }
+            var h = Math.floor(hue + i * 180) % 360;
+            for (j = shape.trail.length - 1; j >= 0; j--) {
+                draw(shape.trail[j], 'hsla(' + h + ', 50%, 50%, ' + (1 - (j + 1) / 7) + ')');
+            }
+            draw(shape.corners, 'hsl(' + h + ', 50%, 50%)');
+        }
+        window.requestAnimationFrame(step);
+    }
+    step();
+}());

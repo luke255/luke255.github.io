@@ -21,18 +21,6 @@ body {
   padding: 0 0.62em;
 }
 
-canvas {
-  background-color: var(--bg-color);
-  height: 100%;
-  image-rendering: pixelated;
-  left: 0;
-  pointer-events: none;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: -1;
-}
-
 footer svg {
   fill: var(--fg-color);
   height: 2em;
